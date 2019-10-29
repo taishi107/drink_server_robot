@@ -31,18 +31,18 @@ class Person_Follow():
                     box_size = calc_box_size(i.xmin,i.ymin,i.xmax,i.ymax)
                     gx,gy = calc_gravity_point(i.xmin,i.ymin,i.xmax,i.ymax)
         
-        self.main(gx,gy,box_size)
+        self.talker(gx,gy,box_size)
 
     def image_callback(self,data):
         self.img = self.bridge.imgmsg_to_cv2(data,'bgr8')
 
 
-    def main(self,x,y,box_size):
+    def talker(self,x,y,box_size):
         #左右
         if self.img.shape[1]/2 - x < -30:
-            self.twist.angular.z = -0.3
+            self.twist.angular.z = -0.5
         elif self.img.shape[1]/2 > self.img.shape[1]/2 - x > 30:
-            self.twist.angular.z = 0.3
+            self.twist.angular.z = 0.5
         else:
             self.twist.angular.z = 0
 
