@@ -13,7 +13,7 @@ from cv_bridge import CvBridge
 class Person_Follow():
     def __init__(self):
         rospy.Subscriber('/darknet_ros/bounding_boxes', BoundingBoxes, self.yolo_callback)
-        rospy.Subscriber('/camera/color/image_raw', Image, self.image_callback)
+        rospy.Subscriber('/darknet_ros/detection_image', Image, self.image_callback)
         self.pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=1)
         self.bridge = CvBridge()
         self.twist = Twist()
