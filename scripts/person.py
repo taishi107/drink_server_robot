@@ -3,7 +3,7 @@
 
 import rospy,sys,cv2
 import numpy as np
-sys.path.append('/home/kattun/catkin_ws/src/pan_vision_control/scripts')
+sys.path.append('/home/kattun/catkin_ws/src/drink_server_robot/scripts')
 from utils import *
 from darknet_ros_msgs.msg import BoundingBoxes,BoundingBox
 from geometry_msgs.msg import Twist
@@ -14,7 +14,7 @@ class Person_Follow():
     def __init__(self):
         rospy.Subscriber('/darknet_ros/bounding_boxes', BoundingBoxes, self.yolo_callback)
         rospy.Subscriber('/darknet_ros/detection_image', Image, self.image_callback)
-        self.pub = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=1)
+        self.pub = rospy.Publisher('/drink_server_robot/diff_drive_controller/cmd_vel', Twist, queue_size=1)
         self.bridge = CvBridge()
         self.twist = Twist()
         self.img = [720,1280]
