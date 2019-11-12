@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <name>drink_server_robot</name>
+  <version>0.0.0</version>
+  <description>The drink_server_robot package</description>
+
+  <maintainer email="kattun@todo.todo">kattun</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>drink_server_control</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>
