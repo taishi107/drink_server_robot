@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>drink_server_robot</name>
+  <name>drink_server_control</name>
   <version>0.0.0</version>
   <description>The drink_server_robot package</description>
 
