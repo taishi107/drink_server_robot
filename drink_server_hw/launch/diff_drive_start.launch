@@ -1,0 +1,15 @@
+<launch>
+
+	<rosparam file="$(find drink_server_hw)/config/controller.yaml" command="load"/>
+
+	<node name="drink_server_hw" pkg="drink_server_hw" type="diff_drive" ns="drink_server_robot"/>
+
+	<node name="controller_spawner" pkg="controller_manager" type="spawner" ns="drink_server_robot" output="screen"
+	 respawn="false" args="joint_state_controller diff_drive_controller"/>
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher"
+		type="robot_state_publisher" respawn="false" output="screen" ns="drink_server_robot"/>
+
+
+</launch>
+
