@@ -3,9 +3,11 @@
 #include <iostream>
 #include <math.h>
 #include <algorithm>
+#include <std_msgs/Bool.h>
 
 
-BeerRobo::BeerRobo(){
+BeerRobo::BeerRobo(ros::NodeHandle nh){
+  node_handle = nh;
 
   hardware_interface::JointStateHandle state_handle_right("right_wheel", &pos_[0], &vel_[0], &eff_[0]);
   joint_state_interface.registerHandle(state_handle_right);
@@ -27,12 +29,31 @@ BeerRobo::BeerRobo(){
   registerInterface(&vel_joint_interface);
 
 
+
+  r_p_sub = node_handle.subscribe("/drink_server_robot/drink_driver/right_push", 10, &BeerRobo::right_pusherCallback, this);
+  l_p_sub = node_handle.subscribe("/drink_server_robot/drink_driver/left_push", 10, &BeerRobo::left_pusherCallback, this);
+  r_s_sub = node_handle.subscribe("/drink_server_robot/drink_driver/right_stop", 10, &BeerRobo::right_stopperCallback, this);
+  l_s_sub = node_handle.subscribe("/drink_server_robot/drink_driver/left_stop", 10, &BeerRobo::left_stopperCallback, this);
+
+  right_push_on = 774;
+  left_push_on = 250;
+  right_stop_on = 512;
+  left_stop_on = 512;
+  right_push_off = 512;
+  left_push_off = 512;
+  right_stop_off = 774;
+  left_stop_off = 250;
+
+  stopper_lim = 102;
+  pusher_lim = 600;
+
+
   //////////////dynamixel_setting/////////
   if ((dev = DX_OpenPort (COMPORT, BAUDRATE))) {
     ROS_ERROR("Open success");
     int i;
-    uint32_t num=20;
-    TDxAlarmStatus stat[20];
+    uint32_t num=100;
+    TDxAlarmStatus stat[100];
     if (DX_Ping2 (dev, &num, stat, &err)) {
       for (i = 0; i < num; i++)
         ROS_ERROR("Found ID=%d %02X", stat[i].id, stat[i].Status);
@@ -44,11 +65,24 @@ BeerRobo::BeerRobo(){
     DX_WriteWordData(dev, left_wheel_id, CCW_Angle_Limit, 0, &err);
     DX_WriteWordData(dev, left_wheel_id, CW_Angle_Limit, 0, &err);
 
-    ROS_INFO("EndlessTurn_Mode_ON");	
+    ROS_INFO("EndlessTurn_Mode_ON");
+
+    /////Drink_Driver Torque Limit /////
+    DX_WriteWordData(dev, right_pusher_id, Max_Torque, 1023, &err);
+    DX_WriteWordData(dev, left_pusher_id, Max_Torque, 1023, &err);
+    DX_WriteWordData(dev, right_stopper_id, Max_Torque, 1023, &err);
+    DX_WriteWordData(dev, left_stopper_id, Max_Torque, 1023, &err);
+
+    DX_WriteWordData(dev, right_pusher_id, Torque_Limit, pusher_lim, &err);
+    DX_WriteWordData(dev, left_pusher_id, Torque_Limit, pusher_lim, &err);
+    DX_WriteWordData(dev, right_stopper_id, Torque_Limit, stopper_lim, &err);
+    DX_WriteWordData(dev, left_stopper_id, Torque_Limit, stopper_lim, &err);
+
 	
   }else{
     ROS_ERROR("Open_error");
   }
+
 
 
 
@@ -103,4 +137,44 @@ void BeerRobo::write(ros::Time time, ros::Duration period){
 }
 
 
+void BeerRobo::right_pusherCallback(const std_msgs::Bool& msg){
+  
+ if (msg.data){ 
+  DX_WriteWordData(dev, right_pusher_id, Goal_Position, right_push_on, &err);
+ }else{
+  DX_WriteWordData(dev, right_pusher_id, Goal_Position, right_push_off, &err);
+ }
+
+}
+
+void BeerRobo::left_pusherCallback(const std_msgs::Bool& msg){
+  
+ if (msg.data){ 
+  DX_WriteWordData(dev, left_pusher_id, Goal_Position, left_push_on, &err);
+ }else{
+  DX_WriteWordData(dev, left_pusher_id, Goal_Position, left_push_off, &err);
+ }
+
+}
+
+
+void BeerRobo::right_stopperCallback(const std_msgs::Bool& msg){
+  
+ if (msg.data){ 
+  DX_WriteWordData(dev, right_stopper_id, Goal_Position, right_stop_on, &err);
+ }else{
+  DX_WriteWordData(dev, right_stopper_id, Goal_Position, right_stop_off, &err);
+ }
+
+}
+
+void BeerRobo::left_stopperCallback(const std_msgs::Bool& msg){
+  
+ if (msg.data){ 
+  DX_WriteWordData(dev, left_stopper_id, Goal_Position, left_stop_on, &err);
+ }else{
+  DX_WriteWordData(dev, left_stopper_id, Goal_Position, left_stop_off, &err);
+ }
+
+}
 

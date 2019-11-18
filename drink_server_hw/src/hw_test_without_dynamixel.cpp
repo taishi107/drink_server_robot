@@ -4,7 +4,7 @@
 #include <math.h>
 
 
-BeerRobo::BeerRobo(){
+BeerRobo::BeerRobo(ros::NodeHandle node_handle){
 
   hardware_interface::JointStateHandle state_handle_right("right_wheel", &pos_[0], &vel_[0], &eff_[0]);
   joint_state_interface.registerHandle(state_handle_right);

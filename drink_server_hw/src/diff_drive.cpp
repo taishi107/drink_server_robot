@@ -10,7 +10,7 @@ int main(int argc, char **argv){
 
   ros::NodeHandle nh;
 
-  BeerRobo beerrobo;
+  BeerRobo beerrobo(nh);
 
   controller_manager::ControllerManager cm(&beerrobo, nh);
 
