@@ -11,6 +11,8 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <run_depend>drink_server_control</run_depend>
+  <run_depend>drink_server_hw</run_depend>
+
 
   <export>
     <metapackage/>
