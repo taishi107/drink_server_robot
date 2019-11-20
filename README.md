@@ -3,7 +3,9 @@
 ## Requirement
 ### dxlib
 1.Dynamixelと通信するためのライブラリを[ここ](http://www.besttechnology.co.jp/download/DXLIB_V4.3.zip)からダウンロードします。
+<br>
 2.ダウンロードしたzipファイルをdrink\_server\_shに入れます.
+<br>
 3.drink\_server\_shに移動します。
 <br>
 `cd drink_server_sh`
