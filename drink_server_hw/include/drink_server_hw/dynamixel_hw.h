@@ -54,8 +54,8 @@ class BeerRobo : public hardware_interface::RobotHW
     const int left_wheel_id = 7;
     const int right_stopper_id = 8;
     const int left_stopper_id = 1;
-    const int right_pusher_id = 3;
-    const int left_pusher_id = 6;
+    const int right_pusher_id = 6;
+    const int left_pusher_id = 3;
     const double cmd_to_d = 57;
 
     uint16_t right_push_on;
