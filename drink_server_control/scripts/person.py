@@ -18,6 +18,7 @@ class Person_Follow():
         self.bridge = CvBridge()
         self.twist = Twist()
         self.img = [720,1280]
+        self.mode = 0
 
 
     def yolo_callback(self,data):
@@ -35,24 +36,33 @@ class Person_Follow():
 
     def image_callback(self,data):
         self.img = self.bridge.imgmsg_to_cv2(data,'bgr8')
+        cv2.imshow('yolo', self.img)
+        cv2.waitKey(1)
 
 
     def talker(self,x,y,box_size):
-        #左右
-        if self.img.shape[1]/2 - x < -30:
-            self.twist.angular.z = -0.5
-        elif self.img.shape[1]/2 > self.img.shape[1]/2 - x > 30:
-            self.twist.angular.z = 0.5
-        else:
-            self.twist.angular.z = 0
+        self.twist.linear.x = 0
+        self.twist.angular.z = 0
 
-        #前進
-        if 0 < box_size <= 150000:
-            self.twist.linear.x = 0.1
-        elif box_size > 250000:
-            self.twist.linear.x = -0.1
-        else:
-            self.twist.linear.x = 0
+        if self.mode == 0:
+            #左右
+            if self.img.shape[1]/2 - x < -30:
+                self.twist.angular.z = -5
+            elif self.img.shape[1]/2 > self.img.shape[1]/2 - x > 30:
+                self.twist.angular.z = 5
+            else:
+                self.twist.angular.z = 0
+
+                #前進
+                if 0 < box_size <= 150000:
+                    self.twist.linear.x = 1
+                elif box_size > 250000:
+                    self.twist.linear.x = -1
+                else:
+                    self.twist.linear.x = 0
+                    print("ok")
+
+        # elif self.mode == 1
         print(self.twist)
         print('~~~~~~~~~~~~~~')
         self.pub.publish(self.twist)
