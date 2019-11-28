@@ -21,8 +21,8 @@ class ControlManipulator():
         self.pub3 = rospy.Publisher('/elbow_servo_controller/command',  Float64, queue_size=10)
         self.pub4 = rospy.Publisher('/wrist_servo_controller/command',  Float64, queue_size=10)
 
-        self.pos_x, self.pos_y, self.pos_z = 200, 0, -30 #ハンド位置の初期値
-        self.post_x, self.post_y, self.post_z = 0, 143, 0 #ハンド姿勢の初期値
+        self.pos_x, self.pos_y, self.pos_z = 75, 0, 75 #ハンド位置の初期値
+        self.post_x, self.post_y, self.post_z = 0, 90, 0 #ハンド姿勢の初期値
         # 各リンクの長さ
         self.l1 = 83
         self.l2 = 93.5
@@ -85,7 +85,7 @@ class ControlManipulator():
         
 
 if __name__ == '__main__':
-    rospy.init_node('hand_control')
+    rospy.init_node('inverse_kinetics')
     rate = rospy.Rate(5)
     cm = ControlManipulator()
     while not rospy.is_shutdown():
