@@ -3,7 +3,7 @@
 
 import rospy, cv2, math
 import numpy as np
-from drink_server_robot.msg import ParamManipulator
+from drink_server_control.msg import ParamManipulator
 from darknet_ros_msgs.msg import BoundingBoxes,BoundingBox
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
@@ -16,8 +16,8 @@ class Talker():
         rospy.Subscriber('/zed_node/depth/depth_registered', Image, self.dep_cb, queue_size=1)
         self.pm = ParamManipulator()
         self.bridge = CvBridge()
-        self.pos_x, self.pos_y, self.pos_z = 0, 0, 0 #ハンド位置の初期位置
-        self.post_x, self.post_y, self.post_z = 0, 0, 0 #ハンド姿勢の初期姿勢
+        self.pos_x, self.pos_y, self.pos_z = 60, 0 ,160 #ハンド位置の初期位置
+        self.post_x, self.post_y, self.post_z = 0, 80, 0 #ハンド姿勢の初期姿勢
         self.img = [0,0] #画像
         self.img_dep = [] #デプス画像
         # self.cup_pos = [] #コップの位置
@@ -120,9 +120,10 @@ class Talker():
                 self.mode = 2
                 print("mode : ", self.mode)
 
+            #初期位置に戻る
             elif self.mode == 2:
-                self.pos_x, self.pos_y, self.pos_z = 0, 0, 0
-                self.post_x, self.post_y, self.post_z = 0, 0, 0
+                self.pos_x, self.pos_y, self.pos_z = 60, 0 ,160
+                self.post_x, self.post_y, self.post_z = 0, 80, 0
 
                 self.pm.pos_x = self.pos_x
                 self.pm.pos_y = self.pos_y
