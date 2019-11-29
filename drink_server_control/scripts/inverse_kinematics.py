@@ -21,7 +21,7 @@ class ControlManipulator():
         self.pub3 = rospy.Publisher('/elbow_servo_controller/command',  Float64, queue_size=10)
         self.pub4 = rospy.Publisher('/wrist_servo_controller/command',  Float64, queue_size=10)
 
-        self.pos_x, self.pos_y, self.pos_z = 75, 0, 75 #ハンド位置の初期値
+        self.pos_x, self.pos_y, self.pos_z = 10, 0, 80 #ハンド位置の初期値
         self.post_x, self.post_y, self.post_z = 0, 90, 0 #ハンド姿勢の初期値
         # 各リンクの長さ
         self.l1 = 83
@@ -77,10 +77,10 @@ class ControlManipulator():
 
         #print(rad1,rad2,rad3,rad4)
         #符号忘れたから実機で確認
-        self.pub1.publish(rad1)
-        self.pub2.publish(rad2 - math.pi/2)
-        self.pub3.publish(-1*rad3)
-        self.pub4.publish(-1*(rad4 + math.pi/2))
+        self.pub1.publish(-1*rad1)
+        self.pub2.publish(-1*(rad2 - math.pi/2))
+        self.pub3.publish(rad3)
+        self.pub4.publish((rad4 + math.pi/2))
 
         
 
