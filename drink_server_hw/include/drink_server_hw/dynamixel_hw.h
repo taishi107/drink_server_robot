@@ -26,8 +26,8 @@ class BeerRobo : public hardware_interface::RobotHW
 
     void write(ros::Time, ros::Duration);
 
-    void right_pusherCallback(const std_msgs::Bool& msg);
-    void left_pusherCallback(const std_msgs::Bool& msg);
+    void right_releaserCallback(const std_msgs::Bool& msg);
+    void left_releaserCallback(const std_msgs::Bool& msg);
     void right_stopperCallback(const std_msgs::Bool& msg);
     void left_stopperCallback(const std_msgs::Bool& msg);
 
@@ -54,20 +54,20 @@ class BeerRobo : public hardware_interface::RobotHW
     const int left_wheel_id = 7;
     const int right_stopper_id = 8;
     const int left_stopper_id = 1;
-    const int right_pusher_id = 6;
-    const int left_pusher_id = 3;
+    const int right_releaser_id = 6;
+    const int left_releaser_id = 3;
     const double cmd_to_d = 57;
 
-    uint16_t right_push_on;
-    uint16_t left_push_on;
+    uint16_t right_release_on;
+    uint16_t left_release_on;
     uint16_t right_stop_on;
     uint16_t left_stop_on;
-    uint16_t right_push_off;
-    uint16_t left_push_off;
+    uint16_t right_release_off;
+    uint16_t left_release_off;
     uint16_t right_stop_off;
     uint16_t left_stop_off;
     uint16_t stopper_lim;
-    uint16_t pusher_lim;
+    uint16_t releaser_lim;
     
 
     uint8_t cmd_param[8];

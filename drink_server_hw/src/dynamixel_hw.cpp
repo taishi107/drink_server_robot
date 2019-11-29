@@ -30,22 +30,22 @@ BeerRobo::BeerRobo(ros::NodeHandle nh){
 
 
 
-  r_p_sub = node_handle.subscribe("/drink_server_robot/drink_driver/right_push", 10, &BeerRobo::right_pusherCallback, this);
-  l_p_sub = node_handle.subscribe("/drink_server_robot/drink_driver/left_push", 10, &BeerRobo::left_pusherCallback, this);
+  r_p_sub = node_handle.subscribe("/drink_server_robot/drink_driver/right_release", 10, &BeerRobo::right_releaserCallback, this);
+  l_p_sub = node_handle.subscribe("/drink_server_robot/drink_driver/left_release", 10, &BeerRobo::left_releaserCallback, this);
   r_s_sub = node_handle.subscribe("/drink_server_robot/drink_driver/right_stop", 10, &BeerRobo::right_stopperCallback, this);
   l_s_sub = node_handle.subscribe("/drink_server_robot/drink_driver/left_stop", 10, &BeerRobo::left_stopperCallback, this);
 
-  right_push_on = 774;
-  left_push_on = 250;
+  right_release_on = 450;
+  left_release_on = 565;
   right_stop_on = 512;
   left_stop_on = 512;
-  right_push_off = 512;
-  left_push_off = 512;
+  right_release_off = 425;
+  left_release_off = 590;
   right_stop_off = 774;
   left_stop_off = 250;
 
   stopper_lim = 102;
-  pusher_lim = 600;
+  releaser_lim = 600;
 
 
   //////////////dynamixel_setting/////////
@@ -68,13 +68,13 @@ BeerRobo::BeerRobo(ros::NodeHandle nh){
     ROS_INFO("EndlessTurn_Mode_ON");
 
     /////Drink_Driver Torque Limit /////
-    DX_WriteWordData(dev, right_pusher_id, Max_Torque, 1023, &err);
-    DX_WriteWordData(dev, left_pusher_id, Max_Torque, 1023, &err);
+    DX_WriteWordData(dev, right_releaser_id, Max_Torque, 1023, &err);
+    DX_WriteWordData(dev, left_releaser_id, Max_Torque, 1023, &err);
     DX_WriteWordData(dev, right_stopper_id, Max_Torque, 1023, &err);
     DX_WriteWordData(dev, left_stopper_id, Max_Torque, 1023, &err);
 
-    DX_WriteWordData(dev, right_pusher_id, Torque_Limit, pusher_lim, &err);
-    DX_WriteWordData(dev, left_pusher_id, Torque_Limit, pusher_lim, &err);
+    DX_WriteWordData(dev, right_releaser_id, Torque_Limit, releaser_lim, &err);
+    DX_WriteWordData(dev, left_releaser_id, Torque_Limit, releaser_lim, &err);
     DX_WriteWordData(dev, right_stopper_id, Torque_Limit, stopper_lim, &err);
     DX_WriteWordData(dev, left_stopper_id, Torque_Limit, stopper_lim, &err);
 
@@ -137,22 +137,22 @@ void BeerRobo::write(ros::Time time, ros::Duration period){
 }
 
 
-void BeerRobo::right_pusherCallback(const std_msgs::Bool& msg){
+void BeerRobo::right_releaserCallback(const std_msgs::Bool& msg){
   
  if (msg.data){ 
-  DX_WriteWordData(dev, right_pusher_id, Goal_Position, right_push_on, &err);
+  DX_WriteWordData(dev, right_releaser_id, Goal_Position, right_release_on, &err);
  }else{
-  DX_WriteWordData(dev, right_pusher_id, Goal_Position, right_push_off, &err);
+  DX_WriteWordData(dev, right_releaser_id, Goal_Position, right_release_off, &err);
  }
 
 }
 
-void BeerRobo::left_pusherCallback(const std_msgs::Bool& msg){
+void BeerRobo::left_releaserCallback(const std_msgs::Bool& msg){
   
  if (msg.data){ 
-  DX_WriteWordData(dev, left_pusher_id, Goal_Position, left_push_on, &err);
+  DX_WriteWordData(dev, left_releaser_id, Goal_Position, left_release_on, &err);
  }else{
-  DX_WriteWordData(dev, left_pusher_id, Goal_Position, left_push_off, &err);
+  DX_WriteWordData(dev, left_releaser_id, Goal_Position, left_release_off, &err);
  }
 
 }
