@@ -78,8 +78,9 @@ class Talker():
     def main(self):
         if len(self.cup_pos) != 0:
             #位置合わせ
-            print(self.cup_pos)
+            # print(self.cup_pos)
             if self.mode == 0:
+                print("mode : ",self.mode)
                 if (self.cup_pos[0] - self.img.shape[1]/2) < 50:
                     self.pos_y -= 1
                     self.pos_flag[0] = False
@@ -134,7 +135,8 @@ class Talker():
  
             #注ぎ動作
             elif self.mode == 1:
-                self.pos_x, self.pos_y, self.pos_z = 120, 0 ,130 
+                print("mode : ",self.mode)
+                self.pos_x, self.pos_y, self.pos_z = 120, 0 ,120 
                 self.post_x, self.post_y, self.post_z = 0, 90, 0 
 
                 #パブリッシュ
@@ -142,28 +144,31 @@ class Talker():
                 #~~~~~~~~~~~~~~~
                 #飲み物を流す処理
                 #~~~~~~~~~~~~~~~
-                rospy.sleep(5)
-
+                rospy.sleep(3)
+                print("mode change")
                 self.mode = 2
-                print("mode : ", self.mode)
 
             #排水動作
             elif self.mode == 2:
+                print("mode : ",self.mode)
                 #少し上に上がる
-                self.pos_x, self.pos_y, self.pos_z = 120, 0 ,160
+                self.pos_x, self.pos_y, self.pos_z = 120, 0 ,170
                 self.post_x, self.post_y, self.post_z = 0, 90, 0
                 self.pm_publisher()
-                rospy.sleep(1)
+                print("Up")
+                rospy.sleep(3)
                 #左に向く
                 self.pos_x, self.pos_y, self.pos_z = -20, -130 ,130
                 self.post_x, self.post_y, self.post_z = 0, 90, 0
                 self.pm_publisher()
-                rospy.sleep(1)
+                print("Turn Left")
+                rospy.sleep(2)
                 #少し下がる
                 self.pos_x, self.pos_y, self.pos_z = -20, -130 ,0
-                self.post_x, self.post_y, self.post_z = 0, 90, 0
+                self.post_x, self.post_y, self.post_z = 0, 130, 0
                 self.pm_publisher()
-                rospy.sleep(1)
+                print("Down")
+                rospy.sleep(2)
                 #排水位置
                 self.pos_x, self.pos_y, self.pos_z = -20, -130 ,-70
                 self.post_x, self.post_y, self.post_z = 0, 160, 0
@@ -200,7 +205,7 @@ class Talker():
 
 if __name__ == '__main__':
     rospy.init_node('hand_control')
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(5)
     t = Talker()
     while not rospy.is_shutdown():
         try:
