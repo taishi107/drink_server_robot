@@ -152,7 +152,7 @@ class Talker():
             elif self.mode == 2:
                 print("mode : ",self.mode)
                 #少し上に上がる
-                self.pos_x, self.pos_y, self.pos_z = 120, 0 ,170
+                self.pos_x, self.pos_y, self.pos_z = 100, 0 ,160
                 self.post_x, self.post_y, self.post_z = 0, 90, 0
                 self.pm_publisher()
                 print("Up")
