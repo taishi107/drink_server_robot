@@ -44,8 +44,8 @@ BeerRobo::BeerRobo(ros::NodeHandle nh){
   right_stop_off = 774;
   left_stop_off = 250;
 
-  stopper_lim = 100;
-  releaser_lim = 600;
+  stopper_lim = 400;
+  releaser_lim = 400;
 
 
   //////////////dynamixel_setting/////////
