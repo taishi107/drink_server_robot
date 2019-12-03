@@ -3,6 +3,7 @@
 # date] 2019.09.26
 
 import numpy as np
+import subprocess
 
 def calc_gravity_point(x_min, y_min, x_max, y_max):
     '''
@@ -56,3 +57,17 @@ def calc_box_size(x_min, y_min, x_max, y_max):
     h = y_max - y_min
 
     return w * h
+
+def jtalk(text):
+   open_jtalk=['open_jtalk']
+   mech=['-x','/var/lib/mecab/dic/open-jtalk/naist-jdic']
+   htsvoice=['-m','/usr/share/hts-voice/mei/mei_normal.htsvoice']
+   speed=['-r','1.0']
+   outwav=['-ow','open_jtalk.wav']
+   cmd=open_jtalk+mech+htsvoice+speed+outwav
+   c = subprocess.Popen(cmd,stdin=subprocess.PIPE)
+   c.stdin.write(text)
+   c.stdin.close()
+   c.wait()
+   aplay = ['aplay','-q','open_jtalk.wav']
+   wr = subprocess.Popen(aplay)
