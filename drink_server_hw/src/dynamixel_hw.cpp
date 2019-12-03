@@ -50,13 +50,15 @@ BeerRobo::BeerRobo(ros::NodeHandle nh){
 
   //////////////dynamixel_setting/////////
   if ((dev = DX_OpenPort (COMPORT, BAUDRATE))) {
-    ROS_ERROR("Open success");
+    ROS_ERROR("COMport open success");
     int i;
     uint32_t num=100;
     TDxAlarmStatus stat[100];
     if (DX_Ping2 (dev, &num, stat, &err)) {
       for (i = 0; i < num; i++)
         ROS_ERROR("Found ID=%d %02X", stat[i].id, stat[i].Status);
+    }else{
+        ROS_ERROR("Dynamixel Not Found");
     }
 
     ////ENdlessTurn_Mode On/////////
