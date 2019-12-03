@@ -10,7 +10,7 @@
 #define Goal_Position 30
 #define Torque_Limit 34
 #define Max_Torque 14
-#define COMPORT "/dev/ttyACM1"
+#define COMPORT "/dev/ttyACM0"
 #define BAUDRATE (500000)
 
 
