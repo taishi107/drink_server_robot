@@ -31,6 +31,9 @@ class BeerRobo : public hardware_interface::RobotHW
     void right_stopperCallback(const std_msgs::Bool& msg);
     void left_stopperCallback(const std_msgs::Bool& msg);
 
+    void right_replacementCallback(const std_msgs::Bool& msg);
+    void left_replacementCallback(const std_msgs::Bool& msg);
+
   private:
 
     ros::Publisher pub;
@@ -39,6 +42,8 @@ class BeerRobo : public hardware_interface::RobotHW
     ros::Subscriber l_p_sub;
     ros::Subscriber r_s_sub;
     ros::Subscriber l_s_sub;
+    ros::Subscriber left_replacement_sub;
+    ros::Subscriber right_replacement_sub;
     hardware_interface::VelocityJointInterface vel_joint_interface;
     hardware_interface::JointStateInterface joint_state_interface;
     double cmd_[2]={0,0};
@@ -68,6 +73,10 @@ class BeerRobo : public hardware_interface::RobotHW
     uint16_t left_stop_off;
     uint16_t stopper_lim;
     uint16_t releaser_lim;
+
+    uint16_t left_replacement;
+    uint16_t right_replacement;
+
     
 
     uint8_t cmd_param[8];

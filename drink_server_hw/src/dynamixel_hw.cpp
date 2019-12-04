@@ -35,6 +35,10 @@ BeerRobo::BeerRobo(ros::NodeHandle nh){
   r_s_sub = node_handle.subscribe("/drink_server_robot/drink_driver/right_stop", 10, &BeerRobo::right_stopperCallback, this);
   l_s_sub = node_handle.subscribe("/drink_server_robot/drink_driver/left_stop", 10, &BeerRobo::left_stopperCallback, this);
 
+  right_replacement_sub = node_handle.subscribe("/drink_server_robot/drink_driver/right_replacement", 10, &BeerRobo::right_replacementCallback, this);
+  left_replacement_sub = node_handle.subscribe("/drink_server_robot/drink_driver/left_replacement", 10, &BeerRobo::left_replacementCallback, this);
+
+
   right_release_on = 450;
   left_release_on = 565;
   right_stop_on = 512;
@@ -43,6 +47,10 @@ BeerRobo::BeerRobo(ros::NodeHandle nh){
   left_release_off = 590;
   right_stop_off = 774;
   left_stop_off = 250;
+
+  right_replacement = 1000;
+  left_replacement = 200;
+
 
   stopper_lim = 400;
   releaser_lim = 400;
@@ -82,7 +90,7 @@ BeerRobo::BeerRobo(ros::NodeHandle nh){
 
 	
   }else{
-    ROS_ERROR("Open_error");
+    ROS_ERROR("COMport Open_error");
   }
 
 
@@ -180,3 +188,18 @@ void BeerRobo::left_stopperCallback(const std_msgs::Bool& msg){
 
 }
 
+void BeerRobo::right_replacementCallback(const std_msgs::Bool& msg){
+
+ if (msg.data){ 
+  DX_WriteWordData(dev, left_stopper_id, Goal_Position, right_replacement, &err);
+ }
+
+}
+
+void BeerRobo::left_replacementCallback(const std_msgs::Bool& msg){
+
+ if (msg.data){ 
+  DX_WriteWordData(dev, left_stopper_id, Goal_Position, left_replacement, &err);
+ }
+
+}
