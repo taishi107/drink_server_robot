@@ -44,16 +44,24 @@
 5. `drink_server_hw/include`ディレクトリ に`dxlib.h`と`dxlib.o`が追加されていれば成功です
 
 ### 使用方法
-1. デバイスファイルに実行権限を与えます。
+
+1. makeします
+
+	```
+	$ cd ~/catkin_ws
+	$ catkin_make
+	```
+
+2. デバイスファイルに実行権限を与えます。
 	
 	```
-	$ sudo chmod 666 /dev/ttyACM0
-	$ sudo chmod 666 /dev/ttyUSB0
+	$ rosrun drink_server_control dev_file_setup.sh
 	```
-2. 以下のコマンドを実行します。
+3. 以下のコマンドを実行します。
 	
 	```
-	$ roslaunch drink_server_control robot_.launch
+	$ roslaunch drink_server_control robot_prepare.launch
+	$ roslaunch drink_server_control drink_robot_start.launch
 	```
 
 
