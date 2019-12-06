@@ -58,13 +58,13 @@ BeerRobo::BeerRobo(ros::NodeHandle nh){
 
   //////////////dynamixel_setting/////////
   if ((dev = DX_OpenPort (COMPORT, BAUDRATE))) {
-    ROS_ERROR("COMport open success");
+    ROS_INFO("COMport open success");
     int i;
     uint32_t num=100;
     TDxAlarmStatus stat[100];
     if (DX_Ping2 (dev, &num, stat, &err)) {
       for (i = 0; i < num; i++)
-        ROS_ERROR("Found ID=%d %02X", stat[i].id, stat[i].Status);
+        ROS_INFO("Found ID=%d %02X", stat[i].id, stat[i].Status);
     }else{
         ROS_ERROR("Dynamixel Not Found");
     }
@@ -191,7 +191,7 @@ void BeerRobo::left_stopperCallback(const std_msgs::Bool& msg){
 void BeerRobo::right_replacementCallback(const std_msgs::Bool& msg){
 
  if (msg.data){ 
-  DX_WriteWordData(dev, left_stopper_id, Goal_Position, right_replacement, &err);
+  DX_WriteWordData(dev, right_releaser_id, Goal_Position, right_replacement, &err);
  }
 
 }
@@ -199,7 +199,7 @@ void BeerRobo::right_replacementCallback(const std_msgs::Bool& msg){
 void BeerRobo::left_replacementCallback(const std_msgs::Bool& msg){
 
  if (msg.data){ 
-  DX_WriteWordData(dev, left_stopper_id, Goal_Position, left_replacement, &err);
+  DX_WriteWordData(dev, left_releaser_id, Goal_Position, left_replacement, &err);
  }
 
 }
