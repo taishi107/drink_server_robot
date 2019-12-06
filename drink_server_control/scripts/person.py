@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import rospy,sys,cv2
+import rospy,sys,cv2,time
 import numpy as np
-sys.path.append('/home/kattun/catkin_ws/src/drink_server_robot/scripts')
+sys.path.append('/home/yamachan/catkin_ws/src/drink_server_robot/scripts')
 from utils import *
 from darknet_ros_msgs.msg import BoundingBoxes,BoundingBox
 from geometry_msgs.msg import Twist
@@ -41,7 +41,7 @@ class Person_Follow():
         self.dep_hold= 0 
 
         for i in data.bounding_boxes:
-            if self.mode == 0 or self.mode == 1:
+            if self.mode == 0 or self.mode == 1 or self.mode == 5:
                 if i.Class == "person": #人判別
                     self.mode = 1
                     if self.box_size < calc_box_size(i.xmin,i.ymin,i.xmax,i.ymax): #一番近い人を探す
@@ -49,7 +49,7 @@ class Person_Follow():
                         self.gx,self.gy = calc_gravity_point(i.xmin,i.ymin,i.xmax,i.ymax)
                         # print("person")
 
-            if self.mode != 3:
+            if self.mode != 3 and self.mode != 4:
                 if i.Class == "cup" or i.Class == "bowl": #コップ判別
                     self.mode = 2
                     if self.box_size < calc_box_size(i.xmin,i.ymin,i.xmax,i.ymax): #一番近いコップを探す
@@ -173,7 +173,20 @@ class Person_Follow():
             # print("mode : ",self.mode)
             m.pf_flag = False
             self.pf_pub.publish(m.pf_flag)
-            self.mode = 0
+            self.mode = 4
+
+        #最後に回転
+        elif self.mode == 4:
+            i = 0
+            for i in range(5):
+                self.twist.angular.z = 2
+                self.cmd_pub.publish(self.twist)
+                time.sleep(0.5)
+                print(i)
+            self.mode = 5
+
+        elif self.mode == 5:
+            self.twist.angular.z = 2
 
         print('~~~~~~~~~~~~~~')
         self.cmd_pub.publish(self.twist)
@@ -185,6 +198,7 @@ class Main():
         rospy.Subscriber('/hc_trigger', Bool, self.hc_flag_callback)
         self.pf_flag = True
         self.pf = Person_Follow()
+        self.bridge = CvBridge()
 
     def pf_flag_callback(self,data):
         self.pf_flag = data.data
@@ -198,8 +212,13 @@ class Main():
             if self.pf_flag == True:
                 try:
                     self.pf.talker()
+                    # if self.pf.mode == 5:
+                    #     time.sleep(5)
                 except Exception as e:
                     print(e)
+
+            # elif self.pf.hc_flag == False and self.pf.mode == 4:
+            #     self.pf.talker()
             rate.sleep()
 
 if __name__ == '__main__':
