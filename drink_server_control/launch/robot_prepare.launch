@@ -1,0 +1,7 @@
+<launch>
+    <include file="$(find crane_plus_hardware)/launch/start_arm_standalone.launch"></include>
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch"></include>
+    <include file="$(find darknet_ros)/launch/yolo_v3.launch"></include>
+    <include file="$(find drink_server_hw)/launch/diff_drive_start.launch"></include>
+    <node pkg="drink_server_control" name="inverse_kinematics" type="inverse_kinematics.py"/>
+</launch>

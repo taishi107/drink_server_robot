@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="drink_server_control" name="hand_control" type="hand_controller.py"/>
+    <node pkg="facial_expression_recognition" name="face" type="main2.py" output="screen"/>
+    <node pkg="drink_server_control" name="person" type="person.py">
+        <!-- <remap from="/drink_server_robot/diff_drive_controller/cmd_vel" to="/cmd_vel"/> -->
+    </node>
+</launch>
