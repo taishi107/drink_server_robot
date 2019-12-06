@@ -52,7 +52,7 @@ BeerRobo::BeerRobo(ros::NodeHandle nh){
   left_replacement = 200;
 
 
-  stopper_lim = 400;
+  stopper_lim = 800;
   releaser_lim = 400;
 
 
