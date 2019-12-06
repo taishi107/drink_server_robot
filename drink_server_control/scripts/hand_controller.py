@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import rospy, cv2, math
+import utils
 import numpy as np
 from drink_server_control.msg import ParamManipulator
 from darknet_ros_msgs.msg import BoundingBoxes,BoundingBox
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from std_msgs.msg import Bool, Int16, String
+from time import sleep
 
 class Talker():
     def __init__(self):
@@ -42,6 +44,10 @@ class Talker():
         self.er_flag = False
         self.emotion = ""
         self.drink_section = 0
+        self.drink1_name = "お茶"
+        self.drink2_name = "黒霧島"
+        self.emotion2 = []
+        self.jtalk = True
         
 
     #バウンディングボックスのコールバック
@@ -71,7 +77,8 @@ class Talker():
         self.img_dep = self.bridge.imgmsg_to_cv2(data,'32FC1')
 
     def er_cb(self,data):
-        self.emotion = data.data
+        #self.emotion = data.data
+        self.emotion2.append(data.data)
         #print(self.emotion,"cb")
         
 
@@ -95,7 +102,6 @@ class Talker():
         self.pm.post_y = self.post_y
         self.pm.post_z = self.post_z
         self.pub.publish(self.pm)
-        #print(self.emotion)
 
     def main(self):
         y_count = 0
@@ -163,22 +169,39 @@ class Talker():
                 #     self.mode = 2
 
             elif self.mode == 1:
+                
                 self.pos_x, self.pos_y, self.pos_z = 0.85, 0.0, 190.0
                 self.post_x, self.post_y, self.post_z = 0, 60, 0
                 self.pm_publisher()
                 rospy.sleep(2)
+                if self.jtalk:
+                    utils.jtalk("飲み物は、" + self.drink1_name + "と、" + self.drink2_name + "、があります")
+
+                    self.jtalk = False
                 #print("ok")
                 
-
+                
+                self.er_flag = True
+                self.er_pub.publish(self.er_flag)
+                
+                sleep(6)
+                #if self.emotion == "HAPPINESS":
+                    #self.emotion2 = True
+                #print(self.emotion2)
                 # 飲み物１の選択
                 ## 音声を流す
                 if self.drink_section == 0:
+                    utils.jtalk(self.drink1_name + "が欲しい場合は、笑顔を見せてください")
+                    sleep(7)
                     # 表情認識
-                    self.er_flag = True
-                    self.er_pub.publish(self.er_flag)
-                    rospy.sleep(2)
+                    #self.er_flag = True
+                    #self.er_pub.publish(self.er_flag)
+                    #rospy.sleep(2)
                     
-                    if self.emotion == "HAPPINESS":
+                    if self.emotion2.count("HAPPINESS") > 0:
+                        rospy.sleep(3)
+                        utils.jtalk(self.drink1_name + "をお注ぎしますね")
+                        rospy.sleep(1)
                         self.pos_x, self.pos_y, self.pos_z = 120, 0+self.pos_hold[0] ,120
                         self.post_x, self.post_y, self.post_z = 0, 90, 0 
                         self.pm_publisher()
@@ -200,17 +223,25 @@ class Talker():
                         self.er_flag = False
                         self.er_pub.publish(self.er_flag)
 
-                        self.mode = 3
+                        self.mode = 2
                     else :
+                        self.emotion2 = []
                         self.drink_section = 1
 
                 elif self.drink_section == 1:
-                    # 表情認識
-                    self.er_flag = True
-                    self.er_pub.publish(self.er_flag)
-                    rospy.sleep(2)
                     
-                    if self.emotion == "HAPPINESS":
+                    sleep(4)
+                    utils.jtalk(self.drink2_name + "が欲しい場合は、笑顔を見せてください")
+                    sleep(7)
+                    # 表情認識
+                    #self.er_flag = True
+                    #self.er_pub.publish(self.er_flag)
+                    #rospy.sleep(2)
+                    
+                    if self.emotion2.count("HAPPINESS") > 0:
+                        rospy.sleep(3)
+                        utils.jtalk(self.drink2_name + "をお注ぎしますね")
+                        rospy.sleep(1)
                         self.pos_x, self.pos_y, self.pos_z = 120, 0+self.pos_hold[0] ,120
                         self.post_x, self.post_y, self.post_z = 0, 90, 0 
                         self.pm_publisher()
@@ -232,8 +263,12 @@ class Talker():
                         self.er_flag = False
                         self.er_pub.publish(self.er_flag)
 
-                        self.mode = 3
+                        self.mode = 2
                     else :
+                        sleep(3)
+                        utils.jtalk("ちゃんときけ、もう一度聞くからな")
+                        rospy.sleep(4)
+                        self.emotion2 = []
                         self.drink_section = 0
 
             #排水動作
@@ -252,8 +287,8 @@ class Talker():
                 print("Turn Left")
                 rospy.sleep(2)
                 #少し下がる
-                self.pos_x, self.pos_y, self.pos_z = -20, -130 ,0
-                self.post_x, self.post_y, self.post_z = 0, 110, 0
+                self.pos_x, self.pos_y, self.pos_z = -20, -70 ,90
+                self.post_x, self.post_y, self.post_z = 0, 90, 0
                 self.pm_publisher()
                 print("Down")
                 rospy.sleep(2)

@@ -120,6 +120,7 @@ class Person_Follow():
             
             if self.twist.angular.z == 0 and self.twist.linear.x == 0:
                 print("コップを出してね")
+		jtalk("コップが見つかりません")		
 
         #コップ追従モード
         if self.mode == 2:
