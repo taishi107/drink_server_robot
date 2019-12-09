@@ -48,6 +48,7 @@ class Talker():
         self.drink2_name = "黒霧島"
         self.emotion2 = []
         self.jtalk = True
+        utils.jtalk("コップをカメラに水平に出してください")
         
 
     #バウンディングボックスのコールバック
@@ -179,12 +180,12 @@ class Talker():
 
                     self.jtalk = False
                 #print("ok")
-                
+                sleep(6)
                 
                 self.er_flag = True
                 self.er_pub.publish(self.er_flag)
                 
-                sleep(6)
+                
                 #if self.emotion == "HAPPINESS":
                     #self.emotion2 = True
                 #print(self.emotion2)
@@ -192,7 +193,7 @@ class Talker():
                 ## 音声を流す
                 if self.drink_section == 0:
                     utils.jtalk(self.drink1_name + "が欲しい場合は、笑顔を見せてください")
-                    sleep(7)
+                    sleep(5)
                     # 表情認識
                     #self.er_flag = True
                     #self.er_pub.publish(self.er_flag)
@@ -211,7 +212,7 @@ class Talker():
                         self.drink_pub[0].publish(0)
                         rospy.sleep(5)
                         self.drink_pub[1].publish(1)
-                        rospy.sleep(10)
+                        rospy.sleep(7)
                         
                         print("Close drink1")
                         self.drink_pub[1].publish(0)
@@ -230,9 +231,9 @@ class Talker():
 
                 elif self.drink_section == 1:
                     
-                    sleep(4)
+                    #sleep(4)
                     utils.jtalk(self.drink2_name + "が欲しい場合は、笑顔を見せてください")
-                    sleep(7)
+                    sleep(5)
                     # 表情認識
                     #self.er_flag = True
                     #self.er_pub.publish(self.er_flag)
@@ -251,7 +252,7 @@ class Talker():
                         self.drink_pub[2].publish(0)
                         rospy.sleep(5)
                         self.drink_pub[3].publish(1)
-                        rospy.sleep(10)
+                        rospy.sleep(7)
                         
                         print("Close drink2")
                         self.drink_pub[3].publish(0)
@@ -262,17 +263,22 @@ class Talker():
 
                         self.er_flag = False
                         self.er_pub.publish(self.er_flag)
-
+                        self.drink_section = 0
                         self.mode = 2
                     else :
                         sleep(3)
-                        utils.jtalk("ちゃんときけ、もう一度聞くからな")
-                        rospy.sleep(4)
+                        utils.jtalk("もう一度、お聞きします")
+                        rospy.sleep(2)
                         self.emotion2 = []
                         self.drink_section = 0
+                        self.jtalk = True
+
+                self.emotion2 = []
 
             #排水動作
             elif self.mode == 2:
+                utils.jtalk("それでは、花見を楽しんでください")
+                sleep(2)
                 print("mode : ",self.mode)
                 #少し上に上がる
                 self.pos_x, self.pos_y, self.pos_z = 100, 0 ,160
@@ -281,17 +287,17 @@ class Talker():
                 print("Up")
                 rospy.sleep(3)
                 #左に向く
-                self.pos_x, self.pos_y, self.pos_z = -20, -130 ,130
+                self.pos_x, self.pos_y, self.pos_z = 0, -60 ,130
                 self.post_x, self.post_y, self.post_z = 0, 90, 0
                 self.pm_publisher()
                 print("Turn Left")
                 rospy.sleep(2)
                 #少し下がる
-                self.pos_x, self.pos_y, self.pos_z = -20, -70 ,90
-                self.post_x, self.post_y, self.post_z = 0, 90, 0
-                self.pm_publisher()
-                print("Down")
-                rospy.sleep(2)
+                # self.pos_x, self.pos_y, self.pos_z = -20, -70 ,90
+                # self.post_x, self.post_y, self.post_z = 0, 90, 0
+                # self.pm_publisher()
+                # print("Down")
+                # rospy.sleep(1)
                 #排水位置
                 self.pos_x, self.pos_y, self.pos_z = -20, -130 ,-70
                 self.post_x, self.post_y, self.post_z = 0, 160, 0
@@ -315,6 +321,8 @@ class Talker():
                 self.mode = 3
             
             if self.mode == 3:
+                utils.jtalk("次の人を探索します、それでは失礼します")
+                sleep(5)
                 self.pf_flag = True
                 m = Main()
                 m.hc_flag = False

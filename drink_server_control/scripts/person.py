@@ -119,8 +119,7 @@ class Person_Follow():
                 self.twist.linear.x = 0
             
             if self.twist.angular.z == 0 and self.twist.linear.x == 0:
-                print("コップを出してね")
-		jtalk("コップが見つかりません")		
+                print("コップを出してね")	
 
         #コップ追従モード
         if self.mode == 2:
@@ -178,8 +177,9 @@ class Person_Follow():
         #最後に回転
         elif self.mode == 4:
             i = 0
-            for i in range(5):
-                self.twist.angular.z = 2
+            for i in range(7):
+                self.twist.angular.z = 4
+                # self.twist.linear.x = 0.5
                 self.cmd_pub.publish(self.twist)
                 time.sleep(0.5)
                 print(i)
