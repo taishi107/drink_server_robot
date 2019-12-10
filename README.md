@@ -52,16 +52,34 @@
 	$ catkin_make
 	```
 
-2. デバイスファイルに実行権限を与えます。
+2. デバイスファイルに実行権限を与えます
 	
 	```
 	$ rosrun drink_server_control dev_file_setup.sh
 	```
-3. 以下のコマンドを実行します。
+	
+3. 以下のコマンドを実行します
 	
 	```
 	$ roslaunch drink_server_control robot_prepare.launch
 	$ roslaunch drink_server_control drink_robot_start.launch
 	```
+	
+## 飲み物の交換方法
 
+以下のコマンドを実行します。
 
+```
+$ rosrun drink_server_control drink_change.py
+```
+
+そうすると以下のようにターミナルに表示されます
+
+```
+a: All Open, r: Right Close, l: Left Close, q: Quit > 
+```
+
+* `a`を選択すると、上のストッパーが両方とも開きます
+* `r`を選択すると、左のストッパーが閉じます
+* `l`を選択すると、左のストッパーが閉じます
+* `q`を選択すると、このプログラムを終了します
